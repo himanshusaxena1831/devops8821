@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Simple Inventory Management System</title>
+    <style>
+        /* CSS Styles (Consistent with previous pages) */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .welcome-section {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .welcome-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .welcome-section p {
+            color: #555;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .stats-section {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            min-width: 200px;
+            margin: 10px;
+            flex: 1;
+        }
+
+        .stat-card h3 {
+            color: #4CAF50;
+            font-size: 2em;
+            margin: 0 0 10px 0;
+        }
+
+        .stat-card p {
+            color: #555;
+            margin: 0;
+            font-size: 1.1em;
+        }
+
+        .navigation-section {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .nav-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+
+        .nav-btn:hover {
+            background-color: #45a049;
+        }
+
+        .nav-btn.secondary {
+            background-color: #2196F3;
+        }
+
+        .nav-btn.secondary:hover {
+            background-color: #0b7dda;
+        }
+
+        .about-section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .about-section p {
+            color: #666;
+            margin: 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            background-color: #f4f4f9;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .stats-section {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Simple Inventory Management System</h1>
+        <p>Track and manage your inventory efficiently</p>
+    </header>
+
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h2>Welcome to Your Inventory Dashboard</h2>
+            <p>This system helps you add, view, update, and manage your inventory items with ease. All data is stored securely in your browser for quick access.</p>
+            <p>Get started by adding a new item or viewing your current stock!</p>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-section" id="statsSection">
+            <!-- Stats will be populated by JavaScript -->
+        </div>
+
+        <!-- Navigation Section -->
+        <div class="navigation-section">
+            <h2>Quick Actions</h2>
+            <div class="nav-buttons">
+                <a href="add-item.html" class="nav-btn">Add New Item</a>
+                <a href="inventory.html" class="nav-btn">View Inventory</a>
+                <a href="#" class="nav-btn secondary" onclick="exportData()">Export Data</a>
+                <a href="#" class="nav-btn" onclick="showAbout()">About This System</a>
+            </div>
+        </div>
+
+        <!-- About Section (Hidden initially) -->
+        <div class="about-section hidden" id="aboutSection">
+            <h3>About</h3>
+            <p>This is a simple, client-side inventory management tool built with HTML, CSS, and JavaScript. It uses localStorage for data persistence. For production use, consider adding a backend database.</p>
+            <button class="nav-btn" onclick="hideAbout()">Close</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Simple Inventory System. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Load inventory from localStorage
+        let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+
+        // Calculate and display stats
+        function loadStats() {
+            const totalItems = inventory.length;
+            const totalValue = inventory.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+            const lowStock = inventory.filter(item => item.quantity < 5).length; // Example: Items with <5 quantity
+
+            const statsSection = document.getElementById('statsSection');
+            statsSection.innerHTML = `
+                <div class="stat-card">
+                    <h3>${totalItems}</h3>
+                    <p>Total Items</p>
+                </div>
+                <div class="stat-card">
+                    <h3>$${totalValue.toFixed(2)}</h3>
+                    <p>Total Value</p>
+                </div>
+                <div class="stat-card">
+                    <h3>${lowStock}</h3>
+                    <p>Low Stock Alerts</p>
+                </div>
+            `;
+        }
+
+        // Export data function (consistent with previous codes)
+        function exportData() {
+            if (inventory.length === 0) {
+                alert('No data to export. Add some items first!');
+                return;
+            }
+
+            const dataStr = JSON.stringify(inventory, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'inventory-backup.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            alert('Inventory exported successfully!');
+        }
+
+        // Show/Hide About Section
+        function showAbout() {
+            document.getElementById('aboutSection').classList.remove('hidden');
+        }
+
+        function hideAbout() {
+            document.getElementById('aboutSection').classList.add('hidden');
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            loadStats();
+        };
+    </script>
+</body>
+</html>

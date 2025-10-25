@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Simple Inventory Management System</title>
+    <style>
+        /* CSS Styles (Consistent with previous pages) */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Login/Registration Styles */
+        .auth-section {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"], input[type="password"], input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus, input[type="file"]:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .auth-btn {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+
+        .auth-btn:hover {
+            background-color: #45a049;
+        }
+
+        .auth-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .link {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+
+        .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: none;
+            text-align: center;
+        }
+
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Dashboard Styles (Original) */
+        .welcome-section {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .welcome-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .welcome-section p {
+            color: #555;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .stats-section {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            min-width: 200px;
+            margin: 10px;
+            flex: 1;
+        }
+
+        .stat-card h3 {
+            color: #4CAF50;
+            font-size: 2em;
+            margin: 0 0 10px 0;
+        }
+
+        .stat-card p {
+            color: #555;
+            margin: 0;
+            font-size: 1.1em;
+        }
+
+        .navigation-section {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .nav-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+
+        .nav-btn:hover {
+            background-color: #45a049;
+        }
+
+        .nav-btn.secondary {
+            background-color: #2196F3;
+        }
+
+        .nav-btn.secondary:hover {
+            background-color: #0b7dda;
+        }
+
+        .logout-btn {
+            background-color: #f44336;
+        }
+
+        .logout-btn:hover {
+            background-color: #da190b;
+        }
+
+        .about-section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .about-section p {
+            color: #666;
+            margin: 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            background-color: #f4f4f9;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .stats-section {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header id="header" class="hidden">
+        <h1>Simple Inventory Management System</h1>
+        <p>Track and manage your inventory efficiently</p>
+    </header>
+
+    <div class="container">
+        <!-- Login Section (Shown First) -->
+        <div id="loginSection" class="auth-section">
+            <h2>Login</h2>
+            <p>Welcome! Please log in to access the dashboard.</p>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="Admin" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="8821" required>
+                </div>
+                <button type="/dashboard" class="auth-btn">Login</button>
+            </form>
+            <div id="loginMessage" class="message"></div>
+            <p>Don't have an account? <a href="#" class="link" onclick="showRegister()">Register here</a></p>
+            <div class="form-group">
+                <input type="file" id="importFile" accept=".txt" onchange="importUsers(event)">
+                <label for="importFile">Import Users from data.txt</label>
+            </div>
+            <button class="auth-btn" onclick="exportUsers()">Export Users to data.txt</button>
+            <p><em>Default: admin / admin123</em></p>
+        </div>
+
+        <!-- Registration Section (Hidden Initially) -->
+        <div id="registerSection" class="auth-section hidden">
+            <h2>Register New User</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="regUsername">Username:</label>
+                    <input type="text" id="regUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Password (min 6 chars):</label>
+                    <input type="password" id="regPassword" minlength="6" required>
+                </div>
+                <button type="submit" class="auth-btn">Register</button>
+            </form>
+            <div id="registerMessage" class="message"></div>
+            <p><a href="#" class="link" onclick="showLogin()">Back to Login</a></p>
+        </div>
+
+        <!-- Dashboard Content (Hidden Until Login) -->
+        <div id="dashboard" class="hidden">
+            <div class="welcome-section">
+                <h2>Welcome back, <span id="userWelcome"></span>!</h2>
+                <p>This system helps you add, view, update, and manage your inventory items with ease. All data is stored securely in your browser for quick access.</p>
+                <p>Get started by adding a new item or viewing your current stock!</p>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="stats-section" id="statsSection">
+                <!-- Stats will be populated by JavaScript -->
+            </div>
+
+            <!-- Navigation Section -->
+            <div class="navigation-section">
+                <h2>Quick Actions</h2>
+                <div class="nav-buttons">
+                    <a href="/add_item" class="nav-btn">Add New Item</a>
+                    <a href="/view_inventory" class="nav-btn">View Inventory</a>
+                    <a href="#" class="nav-btn secondary" onclick="exportData()">Export Inventory</a>
+                    <a href="#" class="nav-btn" onclick="showAbout()">About This System</a>
+                    <button class="nav-btn logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </div>
+
+            <!-- About Section (Hidden initially) -->
+            <div class="about-section hidden" id="aboutSection">
+                <h3>About</h3>
+                <p>This is a simple, client-side inventory management tool built with HTML, CSS, and JavaScript. It uses localStorage for data persistence. For production use, consider adding a backend database.</p>
+                <button class="nav-btn" onclick="hideAbout()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="hidden" id="footer">
+        <p>&copy; 2023 Simple Inventory System. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Initialize users and inventory from localStorage
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+        let currentUser  = localStorage.getItem('currentUser ');
+
+        // Initialize default admin if no users
+        function initUsers() {
+            if (users.length === 0) {
+                users = [{ username: 'admin', password: 'admin123' }];
+                localStorage.setItem('users', JSON.stringify(users));
+                showMessage('loginMessage', 'Default admin created. Export to data.txt for backup.', 'success');
+            }
+        }
+
+        initUsers();
+
+        // Check if already logged in
+        if (currentUser ) {
+            showDashboard();
+        }
+
+        // Login Logic
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const message = document.getElementById('loginMessage');
+
+            if (!username || !password) {
+                showMessage('loginMessage', 'Please enter username and password.', 'error');
+                return;
+            }
+
+            const user = users.find(u => u.username === username && u.password === password);
+            if (!user) {
+                showMessage('loginMessage', 'Invalid username or password.', 'error');
+                return;
+            }
+
+            // Login success
+            localStorage.setItem('currentUser ', username);
+            showMessage('loginMessage', 'Login successful!', 'success');
+            setTimeout(showDashboard, 1000);
+        });
+
+        // Registration Logic
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('regUsername').value.trim();
+            const password = document.getElementById('regPassword').value.trim();
+            const message = document.getElementById('registerMessage');
+
+            if (!username || !password || password.length < 6) {
+                showMessage('registerMessage', 'Username required and password must be at least 6 characters.', 'error');
+                return;
+            }
+
+            if (users.some(u => u.username === username)) {
+                showMessage('registerMessage', 'Username already exists.', 'error');
+                return;
+            }
+
+            // Add new user
+            users.push({ username, password });
+            localStorage.setItem('users', JSON.stringify(users));
+            showMessage('registerMessage', `User  "${username}" registered successfully! You can now login.`, 'success');
+            this.reset();
+            setTimeout(() => {
+                showLogin();
+            }, 2000);
+        });
+
+        // Show Dashboard
+        function showDashboard() {
+            currentUser  = localStorage.getItem('currentUser ');
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('registerSection').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('header').classList.remove('hidden');
+            document.getElementById('footer').classList.remove('hidden');
+            document.getElementById('userWelcome').textContent = currentUser ;
+            loadStats();
+        }
+
+        // Show/Hide Sections
+        function showRegister() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('registerSection').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('registerSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('loginMessage').style.display = 'none'; // Clear message
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('currentUser ');
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('header').classList.add('hidden');
+            document.getElementById('footer').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('loginForm').reset();
+            showMessage('loginMessage', 'Logged out successfully.', 'success');
+        }
+
+        // Import Users from data.txt
+        function importUsers(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                const lines = content.split('\n').filter(line => line.trim() && !line.startsWith('//'));
+                let newUsers = [];
+
+                lines.forEach(line => {
+                    const parts = line.split(':');
+                    if (parts.length === 2) {
+                        const username = parts

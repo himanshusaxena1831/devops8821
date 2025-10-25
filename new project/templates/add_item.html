@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Item - Inventory System</title>
+    <style>
+        /* CSS Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"], input[type="number"], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .add-btn {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .add-btn:hover {
+            background-color: #45a049;
+        }
+
+        .add-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .message {
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 5px;
+            display: none;
+            text-align: center;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Add New Item to Inventory</h1>
+
+    <div class="form-container">
+        <form id="addForm">
+            <div class="form-group">
+                <label for="itemName">Item Name *:</label>
+                <input type="text" id="itemName" required placeholder="e.g., Laptop">
+            </div>
+            <div class="form-group">
+                <label for="quantity">Quantity *:</label>
+                <input type="number" id="quantity" min="0" required placeholder="e.g., 10">
+            </div>
+            <div class="form-group">
+                <label for="price">Price per Unit ($) *:</label>
+                <input type="number" id="price" min="0" step="0.01" required placeholder="e.g., 999.99">
+            </div>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" rows="3" placeholder="Optional details about the item..."></textarea>
+            </div>
+            <button type="submit" class="add-btn" id="submitBtn">Add Item</button>
+        </form>
+        <div id="message" class="message"></div>
+
+        <!-- Export Option (to view added items) -->
+        <div style="text-align: center; margin-top: 20px;">
+            <button onclick="exportInventory()" class="add-btn">Export Inventory (View All Items)</button>
+        </div>
+
+        <div class="back-link">
+            <a href="inventory.html">← Back to Inventory List</a> <!-- Link to full inventory page if you have one -->
+        </div>
+    </div>
+
+    <script>
+        // Initialize or load inventory from localStorage
+        let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+
+        // Handle form submission
+        document.getElementById('addForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const message = document.getElementById('message');
+
+            // Get form values
+            const name = document.getElementById('itemName').value.trim();
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const price = parseFloat(document.getElementById('price').value);
+            const description = document.getElementById('description').value.trim();
+
+            // Validation
+            if (!name) {
+                showMessage('Please enter an item name.', 'error');
+                return;
+            }
+            if (quantity < 0 || isNaN(quantity)) {
+                showMessage('Quantity must be 0 or greater.', 'error');
+                return;
+            }
+            if (price < 0 || isNaN(price)) {
+                showMessage('Price must be 0 or greater.', 'error');
+                return;
+            }
+
+            // Check for duplicate item name (optional: prevent duplicates)
+            if (inventory.some(item => item.name.toLowerCase() === name.toLowerCase())) {
+                showMessage('An item with this name already exists. Please use a unique name.', 'error');
+                return;
+            }
+
+            // Create new item
+            const newItem = {
+                id: Date.now().toString(), // Simple unique ID using timestamp
+                name: name,
+                quantity: quantity,
+                price: price,
+                description: description,
+                addedDate: new Date().toISOString().split('T')[0] // For tracking
+            };
+
+            // Add to inventory
+            inventory.push(newItem);
+            localStorage.setItem('inventory', JSON.stringify(inventory));
+
+            // Show success and reset form
+            showMessage(`Item "${name}" added successfully! Total items: ${inventory.length}`, 'success');
+            this.reset();
+            submitBtn.disabled = false; // Re-enable button
+        });
+
+        // Show message function
+        function showMessage(text, type) {
+            const message = document.getElementById('message');
+            message.textContent = text;
+            message.className = `message ${type}`;
+            message.style.display = 'block';
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 5000); // Auto-hide after 5 seconds
+        }
+
+        // Export inventory as JSON (to view all added items)
+        function exportInventory() {
+            if (inventory.length === 0) {
+                showMessage('No items in inventory yet.', 'error');
+                return;
+            }
+
+            const dataStr = JSON.stringify(inventory, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'inventory.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showMessage('Inventory exported! Check the downloaded file.', 'success');
+        }
+
+        // Optional: Disable submit button on load if needed
+        window.onload = function() {
+            console.log('Current inventory size:', inventory.length); // For debugging
+        };
+    </script>
+</body>
+</html>
