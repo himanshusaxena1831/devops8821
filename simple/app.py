@@ -1,14 +1,12 @@
-from flask import Flask
+from flask import Flask, jsonify, render_template, request
+from datetime import datetime 
+app = Flask(__name__) 
 
-app=Flask(__name__)
-
-@app.route('/')
+@app.route('/home')
 def home():
-    return 'Welcome!'
+    current_day = datetime.now().strftime('%A')
+    topics = "devops, it assets, inventory, management"
+    return render_template('home.html', current_day=current_day, topics=topics)
 
-@app.route('/user/<username>')
-def profile(username):
-    return f"hello {username}!. this is your profile page."
-@app.route('/post/<int:post_id>')
-def show_post(post_id):
-    return f"displaying post name:{}"
+if __name__ == '__main__':
+    app.run(debug=True)

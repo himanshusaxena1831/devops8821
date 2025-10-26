@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add User - IT Inventory</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2fa; margin: 0; padding: 0; }
+        .form-container { background: #fff; width: 350px; margin: 60px auto; padding: 2em; border-radius: 8px; box-shadow: 0 0 20px #e0e0e0; }
+        h2 { text-align: center; color: #005a9e; margin-bottom: 1em; }
+        label { display: block; margin-bottom: 0.5em; color: #333; }
+        input[type="text"], input[type="email"], input[type="password"] { width: 100%; padding: 0.6em; margin-bottom: 1.2em; border: 1px solid #ccc; border-radius: 4px; background: #fafbfc; font-size: 1em; }
+        .btn-submit { width: 100%; background-color: #218cfa; color: #fff; border: none; padding: 0.8em 0; border-radius: 4px; font-size: 1em; cursor: pointer; transition: background 0.3s; }
+        .btn-submit:hover { background: #005a9e; }
+        .msg { color: green; text-align: center; margin-bottom: 1em; }
+        @media (max-width: 500px) { .form-container { width: 90%; padding: 1em; } }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Add User</h2>
+        {% if msg %}
+        <div class="msg">{{ msg }}</div>
+        {% endif %}
+        <form method="POST" action="{{ url_for('add_user') }}">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" name="fullName" placeholder="Full Name" required>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Email Address" required>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Username" required>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <button type="submit" class="btn-submit">Add User</button>
+        </form>
+    </div>
+</body>
+</html>

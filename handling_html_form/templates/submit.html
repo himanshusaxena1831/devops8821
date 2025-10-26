@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>yaksh</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f8f9fa; }
+        .container { background-color: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        input[type="text"] { padding: 8px; margin-right: 10px; border: 1px solid #ccc; border-radius: 3px; }
+        input[type="submit"] { padding: 8px 15px; background-color: #28a745; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        input[type="submit"]:hover { background-color: #218838; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Enter Your Name</h2>
+        <form action="/submit" method="GET">
+            <input type="text" name="user_name" placeholder="user_name" required>
+            <input type="submit" value="Greet Me!">
+        </form>
+
+        <h2>Send a Message (POST Example)</h2>
+        <form action="/message" method="POST">
+            <input type="text" name="sender_name" placeholder="Your Name" required><br><br>
+            <textarea name="message_text" placeholder="Your Message" rows="4" cols="30" required></textarea><br><br>
+            <input type="submit" value="Send Message">
+        </form>
+    </div>
+</body>
+</html>
